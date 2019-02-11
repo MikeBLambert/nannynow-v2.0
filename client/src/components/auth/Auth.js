@@ -1,42 +1,69 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import styles from './Auth.scss';
 import logo from '../../assets/nannyNowLogo.png';
+import { signIn } from './actions';
+import AuthForm from './auth-form/AuthForm';
 
-export default class Auth extends Component {
+class Auth extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
+  state = {
+    email: '',
+    password: '',
+  };
+
+  handleChange = ({ target }) => {
+    this.setState({ [target.name]: target.value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { email, password } = this.state;
+    const { onSubmit } = this.props;
+    onSubmit({ email, password });
+  };
+
   render() {
     const { pathname } = this.props.location;
+    const { email, password } = this.state;
     return (
       <main className={styles.Auth}>
-        {pathname === '/signup' && <SignUp />}
+        {pathname === '/signup' && (
+          <AuthForm
+            titleText="Sign Up Now!"
+            buttonText="Sign Up"
+            email={email}
+            password={password}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+          />
+        )}
         <section className="logo-container">
           <img className="logo" src={logo} />
         </section>
-        {pathname === '/signin' && <SignIn />}
+        {pathname === '/signin' && (
+          <AuthForm
+            titleText="Sign In Now!"
+            buttonText="Sign In"
+            email={email}
+            password={password}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+          />
+        )}
       </main>
     );
   }
 }
 
-const SignIn = () => {
-  return (
-    <section className="sign-in-container">
-      <h1 className="sign-in-text">Sign In Now!</h1>
-      <input className="input-form" placeholder="email" type="email" />
-      <input className="input-form" placeholder="password" type="password" />
-      <button className="sign-in-button">Sign In</button>
-    </section>
-  );
-};
-
-const SignUp = () => {
-  return (
-    <section className="sign-in-container">
-      <h1 className="sign-in-text">Sign Up Now!</h1>
-      <input className="input-form" placeholder="email" type="email" />
-      <input className="input-form" placeholder="password" type="password" />
-      <button className="sign-in-button">Sign Up</button>
-    </section>
-  );
-};
+export default connect(
+  null,
+  dispatch => ({
+    onSubmit: ({ email, password }) => dispatch(signIn({ email, password })),
+  }),
+)(Auth);

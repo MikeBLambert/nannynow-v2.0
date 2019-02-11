@@ -1,6 +1,6 @@
 import React from 'react';
-import Auth from '../auth/Auth';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Auth from '../auth/Auth';
 
 export default function App() {
   return (

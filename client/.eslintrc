@@ -39,11 +39,11 @@
           "before": true,
           "after": true,
           "overrides": {
-              "do": { "after": false },
-              "for": { "after": false },
-              "switch": { "after": false },
-              "while": { "after": false },
-              "catch": { "after": false }
+              "do": { "after": true },
+              "for": { "after": true },
+              "switch": { "after": true },
+              "while": { "after": true },
+              "catch": { "after": true }
           }
         }
       ],
