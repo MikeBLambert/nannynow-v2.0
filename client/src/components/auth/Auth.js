@@ -4,33 +4,46 @@ import PropTypes from 'prop-types';
 
 import styles from './Auth.scss';
 import logo from '../../assets/nannyNowLogo.png';
-import { signIn } from './actions';
+import { signUp, signIn } from './actions';
 import AuthForm from './auth-form/AuthForm';
 
 class Auth extends Component {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+    signUp: PropTypes.func.isRequired,
+    signIn: PropTypes.func.isRequired,
   };
 
   state = {
     email: '',
     password: '',
+    role: '',
   };
 
   handleChange = ({ target }) => {
     this.setState({ [target.name]: target.value });
   };
 
-  handleSubmit = event => {
+  handleRoleChange = ({ target }) => {
+    this.setState({ role: target.value });
+  };
+
+  handleSignUp = event => {
+    event.preventDefault();
+    const { email, password, role } = this.state;
+    const { signUp } = this.props;
+    signUp({ email, password, role });
+  };
+
+  handleSignIn = event => {
     event.preventDefault();
     const { email, password } = this.state;
-    const { onSubmit } = this.props;
-    onSubmit({ email, password });
+    const { signIn } = this.props;
+    signIn({ email, password });
   };
 
   render() {
     const { pathname } = this.props.location;
-    const { email, password } = this.state;
+    const { email, password, role } = this.state;
     return (
       <main className={styles.Auth}>
         {pathname === '/signup' && (
@@ -40,7 +53,9 @@ class Auth extends Component {
             email={email}
             password={password}
             handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
+            handleRoleChange={this.handleRoleChange}
+            handleSubmit={this.handleSignUp}
+            role={role}
           />
         )}
         <section className="logo-container">
@@ -53,7 +68,7 @@ class Auth extends Component {
             email={email}
             password={password}
             handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
+            handleSubmit={this.handleSignIn}
           />
         )}
       </main>
@@ -64,6 +79,7 @@ class Auth extends Component {
 export default connect(
   null,
   dispatch => ({
-    onSubmit: ({ email, password }) => dispatch(signIn({ email, password })),
+    signUp: ({ email, password, role }) => dispatch(signUp({ email, password, role })),
+    signIn: ({ email, password }) => dispatch(signIn({ email, password })),
   }),
 )(Auth);

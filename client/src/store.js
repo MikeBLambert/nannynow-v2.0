@@ -1,9 +1,9 @@
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import { auth } from './components/auth/reducers';
+import { session } from './components/auth/reducers';
 import { middleware } from './middleware';
 
 const rootReducer = combineReducers({
-  auth,
+  session,
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
